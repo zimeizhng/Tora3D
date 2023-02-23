@@ -1,4 +1,8 @@
 # Tora3D
+
+## setup
+you should install pyg in your conda enveriment to run this project
+
 ## Intro 
 you should run the main_drugs-Copy3_ot-1088.ipynb to get trained model or use our pretraind model to get result.
 
