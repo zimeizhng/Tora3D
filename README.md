@@ -1,4 +1,5 @@
 # Tora3D
+this is official implement of Tora3D, a deep-learning method for small molecular 3D conformation generation. please read our paper to get more detials.
 
 ## setup
 you should install pyg in your conda enveriment to run this project
@@ -10,3 +11,6 @@ you should run the main_drugs-Copy3_ot-1088.ipynb to get trained model or use ou
 
 ## 可视化
 你可以在 show3Dstructure.ipynb 中查看预测的构象 
+
+
+
