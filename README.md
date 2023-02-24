@@ -4,6 +4,9 @@ this is official implement of Tora3D, a deep-learning method for small molecular
 ## setup
 you should install pyg in your conda enveriment to run this project
 
+## 预处理
+在 preprocess.ipynb 文件中对GEOM数据集进行预处理
+
 ## Intro 
 you should run the main_drugs-Copy3_ot-1088.ipynb to get trained model or use our pretraind model to get result.
 
