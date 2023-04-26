@@ -63,14 +63,25 @@ def statistic_num_confs(root, label="UNknow", xlabel="x",ylabel="y", size=64, fs
     
     
     
+<<<<<<< HEAD
+# ------------------pandas、Setting the font size of axis labels, title, and legend labels in matplotlib plots.-----------------------
+=======
 # ------------------pandas、matplotlib作图之设置坐标轴标签、标题和图例标签的字体大小-----------------------
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
 # import matplotlib.pyplot as plt
  
 # fig,ax=plt.subplots(1,1,figsize=(9,6))
 
+<<<<<<< HEAD
+# ax.set_ylabel(fontsize=20) 
+# ax.set_xlabel(fontsize=20) 
+# ax.set_title(fontsize=30)  
+# ax.legend(fontsize=15)     
+=======
 # ax.set_ylabel(fontsize=20) #设置y轴标签字体大小
 # ax.set_xlabel(fontsize=20) #设置x轴标签字体大小
 # ax.set_title(fontsize=30)  #设置标题字体大小
 # ax.legend(fontsize=15)     #设置图例字体大小
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
 # =========================================================================================================
     

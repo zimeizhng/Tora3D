@@ -5,14 +5,25 @@ import numpy as np
 import ot
 import random
 from math import cos, sin, pi
+<<<<<<< HEAD
+import torch
+=======
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
 
 
 
 def angle_vector(angle):
+<<<<<<< HEAD
+
+    return [cos(angle*pi/ 180), sin(angle*pi/ 180)]
+def getArotateM(angle):  # 得到一个旋转矩阵(二维的)
+
+=======
     """ 返回一个角（角度值）的向量表示 """
     return [cos(angle*pi/ 180), sin(angle*pi/ 180)]
 def getArotateM(angle):  # 得到一个旋转矩阵(二维的)
     """ 返回旋转某个特定角度（角度值）的旋转矩阵 """
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
     angle_pi = angle*pi/ 180
     return [[cos(angle_pi), -sin(angle_pi)],
              [sin(angle_pi),  cos(angle_pi)]]
@@ -42,9 +53,12 @@ def batchi_replace(tensor, percent, value, min_max ):
 
 def compute_distances(P, C):
     """
+<<<<<<< HEAD
+=======
     计算两组点的距离矩阵
     给tensor返回tensor
     给numpy返回numpy
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
     
     """
     A = (P**2).sum(axis=1, keepdims=True)   #先对P求平方；然后按行求和，并且保持维度。得到一个5行1列的向量。
@@ -66,9 +80,13 @@ def compute_distances(P, C):
 
 def reorder(a_point,b_point):
     """
+<<<<<<< HEAD
+
+=======
     点类型必须为 np.array, 返回也为  np.array
     接受两组点作为输入，改变 b_point 的顺序，使得尽可能与a点距离最近
     return a_point 和 改变顺序后的b_point
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
     """
     len_a = len(a_point) 
     len_b = len(b_point)
@@ -104,7 +122,11 @@ def model_save(model,Train_loss_value
 
 def repeat_tensor_by_numlist(tensor, numlist):
     """
+<<<<<<< HEAD
+    
+=======
     写一个函数实现 tensor 的每一行按照指定数目重复，返回每行重复后的tensor
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
     """
     shape = tensor.shape
 
@@ -128,7 +150,11 @@ def repeat_list_by_numlist(list_, numlist):
 
 def group_by_num(list_, numlist):
     """
+<<<<<<< HEAD
+    
+=======
     正好是上面那个函数的逆，给一个list_, 按照numlist的值来给list_分组
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
     """
     group_list = []
     len_ = len(numlist)
@@ -153,7 +179,11 @@ class pickle_:
         with open(file_name,"wb") as pf:
             pickle.dump(var, pf)
             print (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+<<<<<<< HEAD
+            print(f"save_to_{file_name}")
+=======
             print(f"已经保存到{file_name}中了")
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
     def load(file_name):
         with open(file_name,"rb") as pf:
             unk = pickle.load(pf)
@@ -162,7 +192,10 @@ class pickle_:
         
         
 # ---------------------------------------------------------------  
+<<<<<<< HEAD
+=======
 # 将tensor转化为特定形状
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
 def get_intersection_tensor(tensor, toshape):
     intersection_shape = []
     for i in range(len(tensor.shape)):
@@ -192,7 +225,11 @@ def get_pad_tensor(tensor, toshape, value=0):
     return pad_tensor
 
 def my_reshape_func(tensor, toshape, pad_value=0):
+<<<<<<< HEAD
+
+=======
     # 将tensor转化为特定形状
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
     
     
     intersection_tensor = get_intersection_tensor(tensor, toshape)
@@ -229,9 +266,13 @@ def load_list(file_path):
     
 def get_idxs_bylist(list1, list2):
     """
+<<<<<<< HEAD
+
+=======
     list1: 短
     list2: 長
     give two lists , return index list of list2 by list1
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
     """
     idxs = []
     for i in list1:

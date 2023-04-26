@@ -15,7 +15,11 @@ class PosEmb_Seq2eq(nn.Module):
                  max_Emb_wl,
                  max_Emb_d,
                  
+<<<<<<< HEAD
+                 outp_dim,  # I take 16  
+=======
                  outp_dim,  # I take 16  位置编码到的维度
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
                  trg_emb_dim,  # I take 32
                  ENC_LAYERS,
                  ENC_HEADS,
@@ -26,8 +30,13 @@ class PosEmb_Seq2eq(nn.Module):
                  device,
                  
                  t_e_ENC_LAYERS,
+<<<<<<< HEAD
+                 t_e_ENC_HEADS,      # node_feat_dim+
+                 t_e_ENC_PF_DIM,     # 4 * (node_feat_dim + outp_dim) + 3 * edge_feat_dim  
+=======
                  t_e_ENC_HEADS,      # node_feat_dim+outp_dim可以被t_e_ENC_HEADS整除
                  t_e_ENC_PF_DIM,     # 4 * (node_feat_dim + outp_dim) + 3 * edge_feat_dim  这里的250 所以选50？
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
                  
                  noise_dim = 50,       
                  noise_loc=0, 
@@ -61,6 +70,30 @@ class PosEmb_Seq2eq(nn.Module):
         self.make_pos_d  = Make_pos_d(pf_dim1, pf_dim2, outp_dim, dropout, max_Emb_d)
         
         self.t_e_encoder = Encoder(
+<<<<<<< HEAD
+            node_feat_dim+outp_dim,      # 
+            t_e_ENC_LAYERS,
+            t_e_ENC_HEADS,      # 
+            t_e_ENC_PF_DIM,
+            dropout,
+            device,
+            output_dim=node_feat_dim+outp_dim)   
+        
+        self.encoder = Encoder(
+            self.DIM,      
+            ENC_LAYERS,
+            ENC_HEADS,      
+            ENC_PF_DIM,
+            dropout,
+            device,
+            output_dim=4 * outp_dim + trg_emb_dim)   
+        self.decoder = Decoder(
+            output_dim=4,          
+            hid_dim=trg_emb_dim,     
+            outp_dim=outp_dim,
+            n_layers=DEC_LAYERS,
+            n_heads=DEC_HEADS,      
+=======
             node_feat_dim+outp_dim,      # encoder接受的输入的维度
             t_e_ENC_LAYERS,
             t_e_ENC_HEADS,      # node_feat_dim+outp_dim可以被t_e_ENC_HEADS整除
@@ -83,6 +116,7 @@ class PosEmb_Seq2eq(nn.Module):
             outp_dim=outp_dim,
             n_layers=DEC_LAYERS,
             n_heads=DEC_HEADS,      # hid_dim + 4 * outp_dim要能被n_heads整除
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
             pf_dim=DEC_PF_DIM,
             dropout=dropout,
             device=device
@@ -124,7 +158,11 @@ class PosEmb_Seq2eq(nn.Module):
         
     def repeat_tensor_by_numlist(self, tensor, numlist):
         """
+<<<<<<< HEAD
+        
+=======
         写一个函数实现 tensor 的每一行按照指定数目重复，返回每行重复后的tensor
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
         """
         shape = tensor.shape
 
@@ -189,8 +227,13 @@ class PosEmb_Seq2eq(nn.Module):
         # angle_group_num:   (list)  len = batch_size  eg: [5, 9, 4, 8, 2, 8, 3, 9]
         # atom_feat          torch.Size([batch_size,max_num_atom, 39])
         # AM_bond_feat        torch.Size([batch_size, 9, 9, 10])
+<<<<<<< HEAD
+        # masks              (list)  len = batch_size  
+        # labels             torch.Size([batchxconfs_size, max, 2])  
+=======
         # masks              (list)  len = batch_size  每个元素又是一个由若干个4元组 组成的list
         # labels             torch.Size([batchxconfs_size, max, 2])  短的用0来补齐
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
 
         
         AM_bond_feat_f = AM_bond_feat.reshape(AM_bond_feat.shape[0],-1).float()  # torch.Size([batch_size, 9*9*10])  1/0
@@ -280,7 +323,11 @@ class PosEmb_Seq2eq(nn.Module):
         # add noise
         batch_mol_tor_feat_noise = self.add_noise(batch_mol_tor_feat, self.noise_dim, self.noise_loc, self.noise_scale)
         
+<<<<<<< HEAD
+        # deal with labels
+=======
         # 处理labels
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
         labels_dcopy = copy.deepcopy(labels)
         labels_dcopy[:,:,1] = labels_dcopy[:,:,1]/2
         labels_dcopy = torch.cat((torch.stack([relativeenergys, relativeenergys]).t().unsqueeze(1),labels),1)
@@ -289,7 +336,11 @@ class PosEmb_Seq2eq(nn.Module):
         #torch.Size([batchxconfs_size, max+1, 3])
         
         
+<<<<<<< HEAD
+        # seq2seq
+=======
         # seq2seq模型
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
         prediction, _ = self.model(batch_mol_tor_feat_noise, labels_dcopy, angle_group_num, batch_mol_tor)
         prediction = self.layerNorm(prediction)
         # torch.Size([8, 29])  torch.Size([batch_sice, max+1])
@@ -615,7 +666,11 @@ class PositionwiseFeedforwardLayer(nn.Module):
 
 class Decoder(nn.Module):
     def __init__(self,
+<<<<<<< HEAD
+                 output_dim,    
+=======
                  output_dim,    # 也就是要预测 的类别数 （我取365把）  
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
                  hid_dim,
                  outp_dim,
                  n_layers,
@@ -660,9 +715,15 @@ class Decoder(nn.Module):
 
 #         trg = trg.unsqueeze(2)
 
+<<<<<<< HEAD
+        batch_mol_tor_ = F.pad(batch_mol_tor, pad=(0, 0, 1, 0, 0, 0), mode='constant', value=0)  #  [batch size, 29, 16*4]  
+        trg = torch.cat((self.tok_embedding(trg) * self.scale/2, batch_mol_tor_/2),
+                        -1)  # [batch size, max+1, （16*4 + 32）]  
+=======
         batch_mol_tor_ = F.pad(batch_mol_tor, pad=(0, 0, 1, 0, 0, 0), mode='constant', value=0)  #  [batch size, 29, 16*4]  pad = (左填充，右填充，上填充，下填充)
         trg = torch.cat((self.tok_embedding(trg) * self.scale/2, batch_mol_tor_/2),
                         -1)  # [batch size, max+1, （16*4 + 32）]  32是我取的hid_dim大小
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
         # trg = [batch size, max+1, 16*4+32]
 
         for layer in self.layers:
