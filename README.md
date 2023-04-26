@@ -4,7 +4,9 @@ this is official implement of Tora3D, a deep-learning method for small molecular
 ## Download 
 After you clone this Repositories in your machine, you should download some files/folders(because the limit of github for big file)
   
-1, "data_1/rdkit_folder"   download rdkit_folder.tar.gz file from https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/JNGTDF, put it in data_1 floder, then unzip it use tar commond. The file structure after unzip is as follows:
+1, "data_1/rdkit_folder"   
+
+  download rdkit_folder.tar.gz file from https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/JNGTDF, put it in data_1 floder, then unzip it use tar commond. The file structure after unzip is as follows:
   
      Tora3D
      -data_1
