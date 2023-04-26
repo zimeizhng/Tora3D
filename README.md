@@ -12,9 +12,12 @@ After you clone this Repositories in your machine, you should download some file
      ---druds
      ---qm9
 2,
-  "model_save"         
+  "model_save"      
+  
   "prepare_ori_con"       (If you encounter an error message indicating that the file is corrupted)
+  
   "data1/drugs"
+  
   These three files are obtained from Kuaipan:
         https://pan.quark.cn/s/c32e62fe57b0
         Extraction code: nKrC
