@@ -187,7 +187,7 @@ def get_pad_tensor(tensor, toshape, value=0):
     return pad_tensor
 
 def my_reshape_func(tensor, toshape, pad_value=0):
-    # 将tensor转化为特定形状
+
     
     
     intersection_tensor = get_intersection_tensor(tensor, toshape)
