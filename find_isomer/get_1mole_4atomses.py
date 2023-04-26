@@ -4,7 +4,6 @@ import networkx as nx
 import torch_geometric as tg
 
 import sys 
-# sys.path.append("/home/admin/work/大四下学期药物所服务器文件/大四下学期药物所服务器文件/v100/predict_Dihedral_angle/trans_t_e(pos_wl_d) from_geom/noise_all")
 
 from utils_others import *
 from utils_mole import *
@@ -34,12 +33,12 @@ def get_1mole_4atomses(mol):
     cycles = np.array([cycle for cycle in extract_cycles(mol) if len(cycle)>=5])
     cycle_edge_list = np.array([get_edge_list_from_cycle(cycle) for cycle in cycles])
     cycle_edge_list_type = np.array([np.array(get_edge_type(mol, edge_list)) for edge_list in cycle_edge_list])
-    # 判断是不是单键
+    # 
     cycle_edge_list_type_ios = [(np.array(edge_list_type) != Chem.rdchem.BondType.SINGLE).sum()<=2
                                 for edge_list_type in cycle_edge_list_type]
     
     
-    # 判断哪些环是有小于两个非单键的
+    # 
     choosed_cycles = cycles[cycle_edge_list_type_ios]
     choosed_cycle_edge_list = cycle_edge_list[cycle_edge_list_type_ios]
     choosed_cycle_edge_list_type = cycle_edge_list_type[cycle_edge_list_type_ios]

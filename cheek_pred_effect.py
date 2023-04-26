@@ -31,8 +31,8 @@ import time
 
 from find_isomer.get_iso_by_FF import  drawit, get_ff_ms
 
-# torch.set_printoptions(profile="full")   #  使得tensor完全显示
-# torch.set_printoptions(sci_mode=False)  #   取消科学计数法显示
+# torch.set_printoptions(profile="full")   #
+# torch.set_printoptions(sci_mode=False)  #
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -50,17 +50,17 @@ def construct_test_loader_by_dic(test_200_dic_path,
                                     wl_max_iter, 
                                     num_choosed_confs, 
                                     device = device):
-    # 得到idx
+    # get idx
     test_200_dic = pickle_.load(test_200_dic_path)
     idxs = get_idxs_bylist(test_200_dic.keys(), smilelist)    
 
-    # 得到dataset
+    # get dataset
     smilelist_200 = list(np.array(smilelist)[idxs])
     torsion_angle_200 = list(np.array([t.cpu() for t in torsion_angle])[idxs])
     torsion_list_200 = list(np.array([t.cpu() for t in torsion_list])[idxs])
     relativeenergy_list_200 = list(np.array(relativeenergy_list)[idxs])
 
-    # 得到loadr
+    # get loadr
     test_loader = pre_test_data(smilelist_200, torsion_list_200, torsion_angle_200, relativeenergy_list_200, batch_size,
                   max_num_atom, wl_max_iter, num_choosed_confs, device = device)
     return test_loader
@@ -186,7 +186,7 @@ def generate_pred_confs(model, data_loader,
                 try:
                     mol3D = ori_confs[smile]
                 except KeyError as e:
-                    print(e,"没有这个smiles")
+                    print(e)
                     continue
                 if angle_range_list == None:
                     mol_ff_list = [mol3D]
@@ -202,7 +202,7 @@ def generate_pred_confs(model, data_loader,
                 try:
                     matr,matp,covr,covp             = get_onemol_COV_MAT_o(mol_list_true, mol_list_pred, threshold = 1.25)
                 except RuntimeError as e:
-                    print(e,"没有子结构符合")                    
+                    print(e)                    
                     continue
                 if matp>1e+10:
                     continue             
@@ -234,7 +234,7 @@ def generate_pred_confs(model, data_loader,
             covr_list_list.append(np.mean(covr_list))
             covp_list_list.append(np.mean(covp_list))
             
-            print("目前位置平均准确率：", np.mean(covr_list_list))
+            print( np.mean(covr_list_list))
             
             angles_allconfs_list_list.append(angles_allconfs_list)
             lab_angles_allconfs_list_list.append(lab_angles_allconfs_list)

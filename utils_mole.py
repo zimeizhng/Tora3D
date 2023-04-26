@@ -14,7 +14,7 @@ import py3Dmol
 
 def extract_cycles(mol):
     """
-    提取一个分子中的所有环
+
     """
     row, col = [], []
     for bond in mol.GetBonds():
@@ -44,9 +44,8 @@ def get_edge_list_from_cycle(cycle):
 
 
 def drawit(m, p=None, confId=-1):
-    """ pymol可视化
-    param:
-        m: mol
+    """ 
+    
     """
     if p == None:
         p = py3Dmol.view(width=400,height=200)
@@ -60,7 +59,7 @@ def drawit(m, p=None, confId=-1):
     return p.show()
 # drawit(mol, p)
 
-# 另一个可视化三D小分子的方法：来自于geomol
+
 # -----------------------------------------------------------------------------
 from rdkit import Chem
 import pickle
@@ -93,7 +92,7 @@ def MolTo3DView(mol, size=(600, 600), style="stick", surface=False, opacity=0.5,
         style: str, type of drawing molecule
                style can be 'line', 'stick':{'colorscheme':'cyanCarbon'}
                                    {'colorscheme':'skyblue'}
-                                   但是好像只有"cyanCarbon"有效，其他颜色都无效
+                                   but seems like only "cyanCarbon" works
                               'sphere', 'carton'
         surface, bool, display SAS
         opacity, float, opacity of surface, range 0.0-1.0

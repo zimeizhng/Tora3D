@@ -145,7 +145,6 @@ def norm_inchi_index(mol):
 
 # def get_precisemany_dihedral_pairs_atoms4(smiles):
 #     """
-#     获得分子的二面角，只得到可旋转的二面角，提取每个可旋转键的全部二面角
 #     """
 #     bonds_rotatiable = get_allbonds_rotatiable(smiles)
 #     if len(bonds_rotatiable) == 0:
@@ -178,7 +177,7 @@ def norm_inchi_index(mol):
 
 # def get_preciseone_dihedral_pairs_atoms4(smiles):
 #     """
-#     获得分子的二面角，只得到可旋转的二面角，每个键只选择一个二面角
+#
 #     """
 #     bonds_rotatiable = get_allbonds_rotatiable(smiles)
 #     if len(bonds_rotatiable) == 0:
@@ -232,7 +231,7 @@ def norm_inchi_index(mol):
     
 # def get_dihedral_pairs_atoms4(data):
     
-#     # data需要先整一下, edge_index_dihedral_pairs好像有重复的
+#     # data
 #     bo = data.edge_index_dihedral_pairs
 #     bot = bo.t()
 
@@ -316,7 +315,7 @@ def norm_inchi_index(mol):
 #             else:
 #                 right = bot[i+1][1]
 
-#         # 如果二面角第一个和第四个原子相同，则需要修改一下
+#         # 
 #         if right == left:
 #             right_atom = mol.GetAtomWithIdx(bond[1].item())
 #             for nei_atom in right_atom.GetNeighbors():
@@ -325,7 +324,7 @@ def norm_inchi_index(mol):
 
 #                     break
 
-#             #如果实在没有的话 ，就设为-1       
+#             #    
 #             #if right == left:
 #                 #right = -1
 
@@ -341,7 +340,7 @@ def norm_inchi_index(mol):
     
 # def getDihedralAngle(p0,p1,p2,p3):
 #     """
-#     正负定义在 文件  /home/admin/work/大四下学期药物所服务器文件/大四下学期药物所服务器文件/v100/predict_Dihedral_angle/草稿箱/二面角正负的定义.png  中
+#     
 #     """
 #     p0,p1,p2,p3 = p0.cpu(),p1.cpu(),p2.cpu(),p3.cpu()
     
@@ -362,7 +361,7 @@ def norm_inchi_index(mol):
 #     cos_theta = np.arccos(cos)
 #     theta = np.rad2deg(cos_theta)
     
-#     # 计算正负号
+#     # 
 #     XXY = np.cross(X,Y)
 #     o_o = np.dot(XXY,e12)/(np.linalg.norm(XXY)*np.linalg.norm(e12))
 #     #print(o_o)
@@ -387,7 +386,7 @@ def norm_inchi_index(mol):
 
 
 
-# # 内部调用
+# # 
 # def calculate_dihedrals_from_df(series, pos):
 #     idx4 = series.values
 
@@ -401,7 +400,7 @@ def norm_inchi_index(mol):
 
 # def calculate_dihedrals(data):
 #     """
-#     返回构象数*二面角数的一个矩阵，每个值都是一个二面角
+#     
 #     parm:
 
 #     """
@@ -422,16 +421,10 @@ def norm_inchi_index(mol):
 #     return _3Dmols_DihedralAngles_
 
 
-# 内部调用
+# 
 def convert_dihedral_index(dihedral_pairs_atoms4, mapp):
     
-    """
-    para:
-    dihedral_pairs_atoms4:  四原子二面角索引（norm）
-    mapp:  对应关系
-    
-    将dihedral_pairs_atoms4转化为构象来的index，为了下一步的计算二面角
-    """
+
     dihedral_pairs_atoms4_ = pd.DataFrame(dihedral_pairs_atoms4.cpu().numpy())
     mapp_ = np.array(mapp)
     norm = mapp_.transpose()[::-1][0].tolist()
@@ -501,19 +494,12 @@ def get_alphas_of_1conf(convertd_dihedral_pairs_atoms2,mol, angle_sys=False):
 
 
 def get_alphas_of_1mole(convertd_dihedral_pairs_atoms2,mol_list):
-    """返回一个分子的全部构象的标准二面角序列
-    return： 【num_confs, num_tor】
-    """
+
     return torch.tensor([get_alphas_of_1conf(convertd_dihedral_pairs_atoms2,mol) for mol in mol_list])
 
 
 # def calculate_dihedrals_norm(mol_list, dihedral_pairs_atoms2, mapp):
-#     """
-#     返回构象数*二面角数的一个矩阵，每个值都是一个标准化的二面角
-#     利用RDKIT函数进行计算二面角
-#     parm: 
-#         mol_list： 是提取来的构象（序号非smiles的序号），无H，mapp两种序号对应关系
-#     """
+
 #     num = len(mol_list)
     
 #     _3Dmols_DihedralAngles = []
@@ -530,11 +516,7 @@ def get_alphas_of_1mole(convertd_dihedral_pairs_atoms2,mol_list):
 #     return _3Dmols_DihedralAngles_
 
 def calculate_dihedrals2(data):
-    """
-    返回构象数*二面角数的一个矩阵，每个值都是一个二面角
-    parm:
 
-    """
     mapp = data.mapp
     convertd_dihedral_pairs_atoms2 = convert_dihedral_index(data.dihedral_pairs_atoms2,mapp)
     dihedral_degree = get_alphas_of_1mole(convertd_dihedral_pairs_atoms2,data.mol_list)

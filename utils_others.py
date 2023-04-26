@@ -34,7 +34,7 @@ matplotlib.rcParams[ 'figure.dpi' ] = 300 # Make figures have reasonable resolut
 
 def get_angle(mol_list, mask_):
     """
-    给一个分子的多个构象，返回mask_对应的二面角序列
+    
     
     """
     if type(mask_) == torch.Tensor:
@@ -63,7 +63,6 @@ def rotate_a_mol(mol3D, dihedral_pairs_atoms4, angles_allconfs):
         
 
 def rotate_a_conf(mol3D, dihedral_pairs_atoms4, angles):
-    """接受一个分子需要旋转的二面角，逐个旋转，返回最终的分子mol，自己写的这个函数不会改变原来的分子"""
     
     mol3D_dcopy = copy.deepcopy(mol3D)
     Chem.SanitizeMol(mol3D_dcopy)
@@ -77,7 +76,7 @@ def rotate_a_conf(mol3D, dihedral_pairs_atoms4, angles):
             SetDihedralDeg(mol3D_dcopy.GetConformer(), dih_idx[0],dih_idx[1],dih_idx[2],dih_idx[3], angle)
             
         else:
-            print(dih_idx, "rdkit计算二面角失败，这个二面角不旋转了")
+            print(dih_idx, " ")
             
     return mol3D_dcopy
 # =======================================================================================
@@ -144,7 +143,6 @@ def plot_tor_seq(tensor, cp="g", cl="salmon"):
     plt.legend(prop={'family':'SimHei','size':30})
 
 def cheek_roedbond_pre_con(smiles, masks,tensor):
-    """取出来预测或labels中的可旋转的那部分"""
     bonds_rotatiable = get_allbonds_rotatiable(smiles)
     choosed_dihedral_pairs_atoms4,choosed_dih_idx = choose_dihedral_pairs_atoms4(bonds_rotatiable, masks)
     tensor_ = tensor[:,choosed_dih_idx,:]
@@ -171,8 +169,6 @@ def RMSD_matrix(mols, maxIters =1000):
 
 
 def looklook():
-    """can't run!!!!!!
-    调试用的，查看一下预测值，真实值的相差等等"""
     prediction_list_tensor = torch.tensor(prediction_list)
     prediction_list_tensor.shape
     prediction_list_tensor[:,:,1]
@@ -185,7 +181,6 @@ def looklook():
 
 
 def count_di(tensor_):
-    """计算有多少个不同的值"""
     li = []
     for i in tensor_:
         li.append(str(i.cpu().detach().numpy().tolist()))
@@ -195,7 +190,6 @@ def count_di(tensor_):
 
 
 def sort_confs_by_RMSD(mol_list, maxIters=1000):
-    """这个函数接受一个mol的列表，返回按照与第一个分子的rmsd值排序的列表"""
 #     print(mol_list)
     RMSDlist = []
     for i in range(len(mol_list)):
@@ -212,7 +206,6 @@ def sort_confs_by_RMSD(mol_list, maxIters=1000):
 def genrate_con_from_roedangles_n(prediction_list, masks_list, relativeenergys_list, smiles_list,
                                sdf_input_path,
                                write_root, device, AlignmaxIters = 1000):
-    """这里的write_root 其实是一个根目录"""
             
     suppl = get_suppl_from_sdf(sdf_input_path)
     mol_ref = Chem.AddHs(Chem.MolFromSmiles(smiles_list[0]))
@@ -236,7 +229,7 @@ def genrate_con_from_roedangles_n(prediction_list, masks_list, relativeenergys_l
     
     # 生成的构象保存到sdf文件中
     writosdf(mol_ref,write_root,f"{smiles_list[0]}_roted_confs.sdf".replace("/", "_"))
-    print(f"将mol_ref: {mol_ref} 写入文件{write_root}/",f"{smiles_list[0]}_roted_confs.sdf".replace("/", "_"),"中了")
+    print(f"mol_ref: {mol_ref} save_to{write_root}/",f"{smiles_list[0]}_roted_confs.sdf".replace("/", "_"))
 #     # 对齐构象并保存到sdf文件中
 #     AlignMolConformers(mol_ref,maxIters=AlignmaxIters)
 #     writosdf(mol_ref,write_root,f"{smiles_list[0]}_roted_confs_aligned.sdf".replace("/", "_"))
@@ -254,10 +247,7 @@ def get_suppl_from_sdf(sdf_input_path, removeHs=False):
     return suppl
 
 def visualization_mole(mole):
-    """可视化分子，接收一个smiles 或者 mol  ，显示分子的2D图形
-    
-        return： None
-    """
+
     try:
         mol = Chem.MolFromSmiles(mole)
     except TypeError as e:
@@ -269,19 +259,13 @@ def visualization_mole(mole):
 
 def genrate_con_from_roedangles(smiles, masks, prediction, mol3D, relativeenergy, write_root): 
     """
-    从给定初始构象通过设定可旋转单键二面角角度来生成构象（使用rdkit函数：SetDihedralDeg）
-    pram: 
-        smiles:
-        masks:          模型预测出来的二面角对
-        prediction:     所对应的角度值
-        mol3D:          sdf文件读取来的3d结构mol
-        write_path:     扭转后的小分子写入的文件路径：*.sdf
+
     """
-    print(f"开始扭转{smiles}")
+    print(f"{smiles}")
     try:
         os.makedirs(osp.join(write_root, '{}'.format(smiles.replace("/","_")) ))
     except FileExistsError as e:
-        print(smiles,"文件夹已经存在")
+        print(smiles," ")
     write_path = osp.join(write_root, '{}/rotated_con_re{}.sdf'.format(smiles.replace("/","_"), relativeenergy) )
     writer = Chem.SDWriter(write_path)
     
@@ -313,7 +297,7 @@ def genrate_con_from_roedangles(smiles, masks, prediction, mol3D, relativeenergy
     angles_l = angles.cpu().numpy().tolist()
 
     print("angles_l:", angles_l)
-    # 旋转单键
+
     for j, dih_idx in enumerate(choosed_dihedral_pairs_atoms4):
 
         dih_idx = dih_idx.cpu().numpy().tolist()
@@ -322,9 +306,9 @@ def genrate_con_from_roedangles(smiles, masks, prediction, mol3D, relativeenergy
         if str(GetDihedralDeg(mol3D.GetConformer(), dih_idx[0],dih_idx[1],dih_idx[2],dih_idx[3])) != "nan" :
             SetDihedralDeg(mol3D.GetConformer(), dih_idx[0],dih_idx[1],dih_idx[2],dih_idx[3], angles_l[j])
 
-    # 写入文件
+
     writer.write(mol3D)
-    print("写入文件{}".format(smiles))
+    print("write_to{}".format(smiles))
 
     writer.close()
     
@@ -337,7 +321,6 @@ def open_pickle(mol_path):
     return dic
 
 #==============================================================================================
-# 将mol_list  写入文件中，格式为一个smiles一个文件夹，里面包括若干个不同相对能量的构象
 def write_mollisttosdfdir(root, smiles, mol_list, relativeenergy_list):
     
     if not os.path.exists(root):
@@ -350,18 +333,12 @@ def write_mollisttosdfdir(root, smiles, mol_list, relativeenergy_list):
     for mol_re in mol_re_list:
         write_moltosdf(smiles_dir_name, mol_re[0], mol_re[1])
 
-# # # CanonicalizeMol 规范化后的分子3d坐标写入sdf文件
 # # mol_list_can = [CanonicalizeMol(each["rd_mol"]) for each in mol_dic["conformers"]]
 # write_mollisttosdfdir(save_root, smiles, mol_list, relativeenergy_list)
 
 import os
 def write_moltosdf(root, mol, relativeenergy):
-    # 将mol(一个构象)导出为sdf，保存在root目录下，如果root不存在则递归创建
-    """
-    root: 要写入 的文件夹
-    mol： 有一个构象的3D分子
-    relativeenergy：相对能量
-    """
+
     if not os.path.exists(root):
         os.makedirs(root)
     with open(osp.join(root, f'true_con_re_{relativeenergy}.sdf'),'w+') as file:
@@ -372,25 +349,18 @@ def write_moltosdf(root, mol, relativeenergy):
 
 
 def extract_align_save(chem_dataset_dir, smiles, to_root, sdf_name, maxIters=2000):
-    """
-    提取chem数据文件夹（chem_dataset_dir）中提取感兴趣分子（smiles）的所有构象, 对齐之后保存到to_root文件中
-    
-    return ： None
-    """
+
     mol_list, relativeenergy_list = extract_mol_from_chemdir(chem_dataset_dir, smiles)
-    # 整合为一个mol
+
     mol_ref = aggr_mol(mol_list)
-   
-    # 对齐所有的构象
+
     AlignMolConformers(mol_ref,maxIters=maxIters)
-    
-    # 写入一个sdf文件
+
     writosdf(mol_ref,to_root,sdf_name)
     
     
     
 def open_summery(chem_dataset_dir):
-    # 打开summery文件
     summary_file = glob.glob(os.path.join(chem_dataset_dir, "summary*.json"))[0]
     with open(summary_file, "r") as f:
         summ = json.load(f)
@@ -399,44 +369,32 @@ def open_summery(chem_dataset_dir):
     
     
 def extract_mol_dic_from_chemdir(chem_dataset_dir, smiles):
-    """
-     从提取chem数据文件夹中提取感兴趣分子（smiles）的构象:mol_dic
-     chem_dataset_dir:  "*/drugs or qm9"
-     smiles: 感兴趣的分子的smiles
-     
-     return: mol_dic
-    """
-    # 打开summery文件
+
+
     summary_file = glob.glob(os.path.join(chem_dataset_dir, "summary*.json"))[0]
     with open(summary_file, "r") as f:
         summ = json.load(f)
 #     print(f"{chem_dataset_dir}有{len(summ)}个smiles")
-    # 获取到感兴趣分子对应的pickle文件
+
     smiles_con_path_ = summ[smiles]['pickle_path'].split("/")[-1]
     smiles_con_path = osp.join(chem_dataset_dir,smiles_con_path_)
-    # 打开pickle文件
+
     mol_dic = open_pickle(smiles_con_path)
     mol_list = [each["rd_mol"] for each in mol_dic["conformers"]]
     relativeenergy_list = [each["relativeenergy"] for each in mol_dic["conformers"]]
         
     return mol_dic 
 def extract_mol_from_chemdir(chem_dataset_dir, smiles):
-    """
-     从提取chem数据文件夹中提取感兴趣分子（smiles）的所有构象及其对应的相对能量
-     chem_dataset_dir:  "*/drugs or qm9"
-     smiles: 感兴趣的分子的smiles
-     
-     return: mol_list,relativeenergy_list
-    """
-    # 打开summery文件
+
+
     summary_file = glob.glob(os.path.join(chem_dataset_dir, "summary*.json"))[0]
     with open(summary_file, "r") as f:
         summ = json.load(f)
 #     print(f"{chem_dataset_dir}有{len(summ)}个smiles")
-    # 获取到感兴趣分子对应的pickle文件
+
     smiles_con_path_ = summ[smiles]['pickle_path'].split("/")[-1]
     smiles_con_path = osp.join(chem_dataset_dir,smiles_con_path_)
-    # 打开pickle文件
+
     mol_dic = open_pickle(smiles_con_path)
     mol_list = [each["rd_mol"] for each in mol_dic["conformers"]]
     relativeenergy_list = [each["relativeenergy"] for each in mol_dic["conformers"]]
@@ -444,28 +402,17 @@ def extract_mol_from_chemdir(chem_dataset_dir, smiles):
     return mol_list,relativeenergy_list
 
 def extract_mol_from_chemdir_(chem_dataset_dir, smiles):
-    """
-     从提取chem数据文件夹中提取感兴趣分子（smiles）的所有构象及其对应的相对能量
-     chem_dataset_dir:  "*/drugs or qm9"
-     smiles: 感兴趣的分子的smiles
-     
-     return: mol_list,relativeenergy_list
-    """
-    # 打开summery文件
+
     summary_file = glob.glob(os.path.join(chem_dataset_dir, "summary*.json"))[0]
     with open(summary_file, "r") as f:
         summ = json.load(f)
-#     print(f"{chem_dataset_dir}有{len(summ)}个smiles")
-    # 获取到感兴趣分子对应的pickle文件
     smiles_con_path_ = summ[smiles]['pickle_path'].split("/")[-1]
     smiles_con_path = osp.join(chem_dataset_dir,smiles_con_path_)
-    # 打开pickle文件
     mol_dic = open_pickle(smiles_con_path)
     
     
     conformers = mol_dic['conformers']
     rdmols = [conf["rd_mol"] for conf in conformers]
-    # [len(rdmol.GetConformers()) for rdmol in rdmols]  每个rdmol都是一个构象
     positions = [rdmol.GetConformer().GetPositions() for rdmol in rdmols]
     
     relativeenergy_list = [conf["relativeenergy"] for conf in conformers]
@@ -479,15 +426,12 @@ def aggr_mol(mol_list):
     return mol_ref 
 
 def writosdf(mol,to_root, sdf_name, Align=False, maxIters = 1000):
-    """
-    将mol_list或者一个mol中的多个构象保存到一个sdf文件（osp.join(to_root, sdf_name)）中
-    mol: 可以是mol或者mol_list
-    to_root: 是要保存到的文件夹位置"""
+
     
     try:
         os.makedirs(to_root)
     except FileExistsError as e:
-        print(to_root,"文件夹已经存在")
+        print(to_root,"file exist")
     write_root = osp.join(to_root, sdf_name)    
     
     writer = Chem.SDWriter(write_root)
@@ -500,7 +444,6 @@ def writosdf(mol,to_root, sdf_name, Align=False, maxIters = 1000):
 
     writer.close()
     
-# 自己定义的  COV  和  AMR
 # ————————————————————————————————————————
 def COV(true_mol_list, predict_mol_list, threshold = 1.25, maxIters = 1000):
     true = 0
@@ -515,7 +458,7 @@ def COV(true_mol_list, predict_mol_list, threshold = 1.25, maxIters = 1000):
                     true+=1
                     break
             except RuntimeError as e:
-                print("COV计算出现问题：RuntimeError: No sub-structure match found between the probe and query mol")
+                print("COV error RuntimeError: No sub-structure match found between the probe and query mol")
                 return None
     return true/len(true_mol_list)
 
@@ -532,7 +475,6 @@ def AMR(true_mol_list, predict_mol_list):
 # ===============================================================================
 
 
-# geodiff 的COV MAT方法
 # ----------------------------------------------------------------------------
 def get_best_rmsd(mol1, mol2):
     probe = Chem.RemoveHs(mol1)
@@ -599,15 +541,14 @@ def average_edges(bonds, bond_feat):
 # ------------------------------------------------------------------------------------------
 def load_4files(path, ol, nam = " (1)"):
     """load four list files"""
- 
-    # 文件路径
+
     smiles_list_path = osp.join(path, ol, f"smiles_list{nam}.pkl" )          
     torsion_idx_list_path = osp.join(path, ol, f"torsion_idx_list{nam}.pkl")
 
     torsion_list_path = osp.join(path, ol, f"torsion_list{nam}.pkl")
     relativeenergy_list_path = osp.join(path, ol, f"relativeenergy_list{nam}.pkl")
 
-    print("开始读取加载数据")
+    print("start loading data")
     print (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smilelist = pickle_.load(smiles_list_path)
     torsion_angle = pickle_.load(torsion_list_path)
@@ -616,7 +557,7 @@ def load_4files(path, ol, nam = " (1)"):
 
     # torsion_angle = [list(zip(torsion[0],(np.array(torsion[1])+1).tolist())) for torsion in torsion_angle]
 
-    print("加载完成")
+    print("done")
     print (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) )
     print(len(smilelist), len(torsion_angle), len(torsion_list), len(relativeenergy_list))
     return smilelist, torsion_angle, torsion_list, relativeenergy_list 
@@ -625,7 +566,7 @@ def load_4files(path, ol, nam = " (1)"):
 
 def df_groupby(df, by):
     """
-    按某列分组并求平均值
+    Group by a column and calculate the mean value.
     param:
         df : 
                 angle_group_num	num_confs_list	matr	matp	covr	covp

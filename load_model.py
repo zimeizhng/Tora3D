@@ -10,7 +10,7 @@ def load_model(max_num_atom,
             wl_max_iter,
             device, 
             cheekpoint_path=None ):
-    model = PosEmb_Seq2eq(          # 4 * (node_feat_dim + outp_dim*3) + 3 * edge_feat_dim  要能除尽ENC_HEADS    
+    model = PosEmb_Seq2eq(          # 4 * (node_feat_dim + outp_dim*3) + 3 * edge_feat_dim 
 
         pf_dim_pos=256,
         pf_dim1=256,  # I take 256
@@ -23,7 +23,7 @@ def load_model(max_num_atom,
         trg_emb_dim=512,
 
         ENC_LAYERS=1,
-        ENC_HEADS=5,  # 这里需要注意不能随便取，需要能整除的才行
+        ENC_HEADS=5,  # 
         ENC_PF_DIM=128,
         DEC_LAYERS=3,
         DEC_HEADS=4,
@@ -31,7 +31,7 @@ def load_model(max_num_atom,
         device=device,
 
         t_e_ENC_LAYERS=1,
-        t_e_ENC_HEADS=5,      # node_feat_dim+outp_dim可以被t_e_ENC_HEADS整除
+        t_e_ENC_HEADS=5,      
         t_e_ENC_PF_DIM=64,
 
 
@@ -51,7 +51,7 @@ def load_model(max_num_atom,
 
     
     if cheekpoint_path is not None:
-        # 模型加载
+        
         cheekpoint = torch.load(cheekpoint_path)
         model.load_state_dict(cheekpoint['model'])
         

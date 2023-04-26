@@ -10,14 +10,13 @@ from rdkit.Chem import MolFromSmiles
 import networkx as nx
 import hashlib
 
-# 被generate_feat调用
+
 def one_of_k_encoding(x, allowable_set):
     if x not in allowable_set:
         raise Exception("input {0} not in allowable set{1}:".format(
             x, allowable_set))
     return [x == s for s in allowable_set]
 
-# 被generate_feat调用
 def one_of_k_encoding_unk(x, allowable_set):
     """Maps inputs not in the allowable set to the last element."""
     if x not in allowable_set:
@@ -25,11 +24,8 @@ def one_of_k_encoding_unk(x, allowable_set):
     return [x == s for s in allowable_set]
 
 
-# 外部调用
+
 def generate_feat(smiles, max_num_atom, wl_max_iter,device="cuda"):
-    # smiles： 一个分子的smiles
-    # max_num_atom： 决定要将AM_bond_feat  pad到多少的平方  这个数字不是由batch_size内部决定的而是由全部数据来决定的，本项目中使用9
-    # wl_max_iter：wl算法迭代次数  默认选3
 
     mol = MolFromSmiles(smiles)
     Chem.SanitizeMol(mol)
@@ -97,7 +93,7 @@ def generate_feat(smiles, max_num_atom, wl_max_iter,device="cuda"):
 
     BOND_STEREO = ["STEREONONE", "STEREOANY", "STEREOZ", "STEREOE"]
 
-    AM_bond_feat = torch.zeros([max_num_atom, max_num_atom, 10], device = device)  # max_num_atom： 决定要将AM_bond_feat  pad到多少的平方
+    AM_bond_feat = torch.zeros([max_num_atom, max_num_atom, 10], device = device)  
 
     for bond in mol.GetBonds():
         #     print(bond.GetBeginAtomIdx(), bond.GetEndAtomIdx())
@@ -133,7 +129,6 @@ def generate_feat(smiles, max_num_atom, wl_max_iter,device="cuda"):
     return atom_feat, AM_bond_feat, node_color_list, d_list, num_atom
 
 
-# 被generate调用
 def WL_recursion(node_list, node_color_dict, node_neighbor_dict, max_iter):
     iteration_count = 1
     while True:
@@ -150,15 +145,13 @@ def WL_recursion(node_list, node_color_dict, node_neighbor_dict, max_iter):
         for node in new_color_dict:
             new_color_dict[node] = color_index_dict[new_color_dict[node]]
         if max(node_color_dict.values())==max(new_color_dict.values()) or iteration_count==max_iter:
-#             if iteration_count==max_iter:
-#                 print('这个图太复杂了，同构算法超过设定迭代数还没算出来',max_iter)
+
             return node_color_dict
         else:
             node_color_dict = new_color_dict
         iteration_count += 1
 
-        
-# 被WL_recursion调用
+
 def setting_init(node_list, link_list):
     node_color_dict = {}
     node_neighbor_dict = {}

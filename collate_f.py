@@ -38,7 +38,7 @@ def collate(samples, max_num_atom, wl_max_iter,num_choosed_confs = 300, device =
     try:
         atom_feat, AM_bond_feat, node_color_list, d_list, num_atom_list = zip(*[generate_feat(smile, max_num_atom, wl_max_iter,device=device) for smile in smiles])
     except TypeError as e:
-        print("这个里面有generate_feat 错误")
+        print(" ")
     
     atom_feat = torch.stack(atom_feat)
     AM_bond_feat = torch.stack(AM_bond_feat)
