@@ -19,8 +19,13 @@ def batch_inference(model, batch_data, loss_criterion, loss_criterion_, optimize
         pred_lab_ = torch.cat([pred_lab[index][0: group] for index,group in enumerate(repeat_list_by_numlist(angle_group_num,num_confs_list))])
         torch.set_printoptions(profile="full")
         torch.set_printoptions(sci_mode=False) 
+<<<<<<< HEAD
         print("value:",pred_lab_[:,0])
         print("sig:",pred_lab_[:,1])            
+=======
+        print("value对比：",pred_lab_[:,0])
+        print("sig对比：",pred_lab_[:,1])            
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
     prediction_list = [prediction[index][0: group] for index,group in enumerate(repeat_list_by_numlist(angle_group_num,num_confs_list))]    
     prediction_ = torch.cat(prediction_list)
     labels_list = [labels[index][0: group] for index, group in enumerate(repeat_list_by_numlist(angle_group_num,num_confs_list))]

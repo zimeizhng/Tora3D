@@ -34,7 +34,13 @@ dihedral_pattern = Chem.MolFromSmarts('[*]~[*]~[*]~[*]')
 
 class geom_confs(Dataset):
     def __init__(self, root, get_dih_mothed="preciseone", save_data_path=None, save_every = 10000, transform=None, pre_transform=None, write=True, appoint_mole=None, save_con_path=None, AlignmaxIters=1000, device="cuda"):
+<<<<<<< HEAD
 
+=======
+        # root：geom分子构象数据文件存放位置
+        # appoint_mole： 决定是否仅返回感兴趣分子的四个list， 默认为None, 可以传入smiles list
+        # save_con_path： 决定是否将分子的真实构象保存到sdf文件中， 默认为None，可以传入  "*.sdf“
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
         super(geom_confs, self).__init__(root, transform, pre_transform)
 
         self.root = root
@@ -46,9 +52,15 @@ class geom_confs(Dataset):
         
         # ----------------------------------------------------
         # 准备self.all_files
+<<<<<<< HEAD
         if appoint_mole==None:    # 
             self.all_files = glob.glob(osp.join(self.root, '*.pickle'))
         elif appoint_mole!=None:   # 
+=======
+        if appoint_mole==None:    # 全部
+            self.all_files = glob.glob(osp.join(self.root, '*.pickle'))
+        elif appoint_mole!=None:   # 指定的几个感兴趣的分子
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
             self.all_files = []
             summary_file = glob.glob(os.path.join(self.root, "summary*.json"))[0]
             with open(summary_file, "r") as f:
@@ -60,7 +72,11 @@ class geom_confs(Dataset):
         # ==================================================
         
         # ----------------------------------------------------
+<<<<<<< HEAD
         # 
+=======
+        # 确定是否返回真实构象
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
         self.save_con_path = save_con_path
         if self.save_con_path is not None:
             if not os.path.exists(self.save_con_path):
@@ -68,10 +84,17 @@ class geom_confs(Dataset):
         # ==================================================
     
         # ----------------------------------------------------
+<<<<<<< HEAD
         # 
         if self.write ==True:
             if save_data_path==None:
                 raise ValueError(" when write is true, must have save_data_path")   
+=======
+        # 确定是否将四个list写入文件
+        if self.write ==True:
+            if save_data_path==None:
+                raise ValueError(" write为true时， 必须传入参数：save_data_path")   
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
             if save_data_path!=None:
                 if not os.path.exists(save_data_path):
                     os.makedirs(save_data_path)  
@@ -94,7 +117,13 @@ class geom_confs(Dataset):
     def get(self, idx):
 #         print(idx)
         """
+<<<<<<< HEAD
 
+=======
+        return data
+        data.mapp:  list of tupple 表示对应关系，里面前面的是3d构象的原子索引，后面的是标准smiles 原子索引
+        data.mol_list:  过滤以后的mol_list, 无H
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
         """
 
         pickle_file = self.all_files[idx]
@@ -107,6 +136,10 @@ class geom_confs(Dataset):
             # data.dihedral_pairs_atoms4 = self.get_dihedral_pairs_atoms4_(data.name)
             
             data.dihedral_pairs_atoms2 = torch.tensor(get_allbonds_rotatiable(data.name)).to(self.device)
+<<<<<<< HEAD
+=======
+            # data.dihedral_pairs_atoms2  [可旋转键数，2]
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
             data.dihedral_degree = calculate_dihedrals2(data)
             
             if self.write ==True:
@@ -156,7 +189,11 @@ class geom_confs(Dataset):
             if self.save_con_path:
 #                 mol_list_ = sort_confs_by_RMSD(data.mol_list, maxIters=self.AlignmaxIters)
 
+<<<<<<< HEAD
                 # 
+=======
+                # 写入一个sdf文件
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
                 writosdf(data.mol_list,self.save_con_path,f"{data.name}_true_confs_aligned.sdf".replace("/", "_"), Align=True, maxIters = self.AlignmaxIters)
                 
         return data
@@ -169,7 +206,11 @@ class geom_confs(Dataset):
     def featurize_mol(self, mol_dic):
         
         
+<<<<<<< HEAD
         # 
+=======
+        # 烦死了，mol_dic还得重新排序一下，有的不是按照relativeenergy来排的
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
         relativeenergy_list = [dic["relativeenergy"] for dic in mol_dic["conformers"]]
         idx_sort = np.argsort(relativeenergy_list)
         mol_dic["conformers"] = np.array(mol_dic["conformers"])[idx_sort].tolist()
@@ -187,7 +228,11 @@ class geom_confs(Dataset):
             return None
         # filter mol that don't have rotatiable bonds
         if len(get_allbonds_rotatiable(canonical_smi))==0:
+<<<<<<< HEAD
             print("")
+=======
+            print("没有可旋转键")
+>>>>>>> ead8aac572b4bfbf5e25b5638f0da5f049708d5f
             return None
         # skip conformers with fragments
         if '.' in name:
